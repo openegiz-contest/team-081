@@ -1,0 +1,736 @@
+{
+ "uid": "aktogay-haulage",
+ "title": "Актогай — транспорт и диспетчеризация",
+ "tags": [
+  "aktogay",
+  "mine"
+ ],
+ "timezone": "browser",
+ "schemaVersion": 39,
+ "version": 1,
+ "refresh": "10s",
+ "time": {
+  "from": "now-30m",
+  "to": "now"
+ },
+ "description": "Двойники kz.aktogay:* в Ditto → MQTT → Telegraf → InfluxDB. 3D-сцена и what-if: http://localhost:8070",
+ "links": [
+  {
+   "title": "3D-сцена карьера",
+   "url": "http://localhost:8070",
+   "type": "link",
+   "targetBlank": true
+  }
+ ],
+ "panels": [
+  {
+   "id": 1,
+   "type": "stat",
+   "title": "Сульфидная руда на ЗКД за смену",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 0,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#2bb3a3"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:mine\" and r._field == \"value_sulphide_to_crusher_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "type": "stat",
+   "title": "Сульфидная руда на склад",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 4,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 0,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#e5484d"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:mine\" and r._field == \"value_sulphide_to_stockpile_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "type": "stat",
+   "title": "Окисленная руда на КВ",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 8,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 0,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#e07a3c"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:mine\" and r._field == \"value_oxide_to_leach_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "type": "stat",
+   "title": "Медь в добытой руде",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 1,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#f2b33d"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:mine\" and r._field == \"value_copper_in_ore_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "type": "stat",
+   "title": "Прогноз меди к концу смены",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 16,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 1,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#f2b33d"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:dispatcher\" and r._field == \"value_forecast_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "type": "stat",
+   "title": "Потери от активных сценариев, т Cu",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 20,
+    "y": 0,
+    "w": 4,
+    "h": 4
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "decimals": 1,
+     "color": {
+      "mode": "fixed",
+      "fixedColor": "#e5484d"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "colorMode": "value",
+    "graphMode": "area",
+    "textMode": "value"
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "from(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:dispatcher\" and r._field == \"value_forecast_properties_loss_cu_t\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "type": "timeseries",
+   "title": "Производительность погрузки, т/ч (факт с начала смены)",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 4,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "none",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId =~ /^kz.aktogay:(ex-01|ex-02|ex-03|wl-01)$/ and r._field == \"value_production_properties_rate_tph\")\n  |> map(fn: (r) => ({r with name: strings.toUpper(v: strings.split(v: r.thingId, t: \":\")[1])}))\n  |> keep(columns: [\"_time\", \"_value\", \"name\"])\n  |> group(columns: [\"name\"])"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "type": "timeseries",
+   "title": "Прогноз меди к концу смены: с текущими сценариями и без них, т",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 4,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "masst",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:dispatcher\" and r._field == \"value_forecast_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> map(fn: (r) => ({r with _field: \"с текущими сценариями\"}))"
+    },
+    {
+     "refId": "B",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:dispatcher\" and r._field == \"value_forecast_properties_baseline_cu_t\")\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> map(fn: (r) => ({r with _field: \"без сценариев\"}))"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "type": "timeseries",
+   "title": "ЗКД: производительность, т/ч",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 12,
+    "w": 8,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "none",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:crusher\" and r._field == \"value_throughput_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "type": "timeseries",
+   "title": "ЗКД: заполнение бункера, %",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 8,
+    "y": 12,
+    "w": 8,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:crusher\" and r._field == \"value_bin_properties_pct\")\n  |> keep(columns: [\"_time\", \"_value\"])"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "type": "timeseries",
+   "title": "Очереди самосвалов у погрузки",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 16,
+    "y": 12,
+    "w": 8,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "none",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId =~ /^kz.aktogay:(ex-01|ex-02|ex-03|wl-01)$/ and r._field == \"value_queue_properties_value\")\n  |> map(fn: (r) => ({r with name: strings.toUpper(v: strings.split(v: r.thingId, t: \":\")[1])}))\n  |> keep(columns: [\"_time\", \"_value\", \"name\"])\n  |> group(columns: [\"name\"])"
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "type": "timeseries",
+   "title": "Скорость самосвалов, км/ч",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "velocitykmh",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId =~ /^kz.aktogay:(ht-[0-9]+)$/ and r._field == \"value_speed_properties_value\")\n  |> map(fn: (r) => ({r with name: strings.toUpper(v: strings.split(v: r.thingId, t: \":\")[1])}))\n  |> keep(columns: [\"_time\", \"_value\", \"name\"])\n  |> group(columns: [\"name\"])"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "type": "timeseries",
+   "title": "Мощность двигателя самосвалов, кВт",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 20,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "none",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId =~ /^kz.aktogay:(ht-[0-9]+)$/ and r._field == \"value_engine_power_properties_value\")\n  |> map(fn: (r) => ({r with name: strings.toUpper(v: strings.split(v: r.thingId, t: \":\")[1])}))\n  |> keep(columns: [\"_time\", \"_value\", \"name\"])\n  |> group(columns: [\"name\"])"
+    }
+   ]
+  },
+  {
+   "id": 14,
+   "type": "timeseries",
+   "title": "Топливо в баках, %",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 0,
+    "y": 28,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "percent",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId =~ /^kz.aktogay:(ht-[0-9]+)$/ and r._field == \"value_fuel_properties_value\")\n  |> map(fn: (r) => ({r with name: strings.toUpper(v: strings.split(v: r.thingId, t: \":\")[1])}))\n  |> keep(columns: [\"_time\", \"_value\", \"name\"])\n  |> group(columns: [\"name\"])"
+    }
+   ]
+  },
+  {
+   "id": 15,
+   "type": "timeseries",
+   "title": "Средний цикл самосвала и простой в очередях, мин",
+   "datasource": {
+    "type": "influxdb",
+    "uid": "opentwins-influxdb"
+   },
+   "gridPos": {
+    "x": 12,
+    "y": 28,
+    "w": 12,
+    "h": 8
+   },
+   "fieldConfig": {
+    "defaults": {
+     "unit": "m",
+     "custom": {
+      "lineWidth": 2,
+      "fillOpacity": 0,
+      "showPoints": "never"
+     }
+    },
+    "overrides": []
+   },
+   "options": {
+    "legend": {
+     "displayMode": "list",
+     "placement": "bottom"
+    },
+    "tooltip": {
+     "mode": "multi"
+    }
+   },
+   "targets": [
+    {
+     "refId": "A",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:fleet\" and r._field == \"value_avg_cycle_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> map(fn: (r) => ({r with _field: \"цикл\"}))"
+    },
+    {
+     "refId": "B",
+     "datasource": {
+      "type": "influxdb",
+      "uid": "opentwins-influxdb"
+     },
+     "query": "import \"strings\"\nfrom(bucket: \"default\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r.thingId == \"kz.aktogay:fleet\" and r._field == \"value_queue_time_properties_value\")\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> map(fn: (r) => ({r with _field: \"очереди\"}))"
+    }
+   ]
+  }
+ ]
+}

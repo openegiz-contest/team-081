@@ -1,4 +1,4 @@
-.PHONY: up down ps logs smoke clean example-mine example-mine-stop install uninstall status endpoints upgrade upload-build generate-data copy-build unity-demo check-secrets check-public-host
+.PHONY: up down ps logs smoke clean example-mine example-mine-stop aktogay aktogay-stop aktogay-verify install uninstall status endpoints upgrade upload-build generate-data copy-build unity-demo check-secrets check-public-host
 
 # ---------------------------------------------------------------------------
 # Docker Compose deployment (laptops, CI, contest judges): deploy/compose/
@@ -9,7 +9,10 @@ COMPOSE_BASE := docker compose -f deploy/compose/docker-compose.yml
 # `make clean` forgets it.
 MINE_MARKER  := deploy/compose/.example-mine
 MINE_COMPOSE := examples/mine/compose.yml
-COMPOSE := $(COMPOSE_BASE)$(if $(wildcard $(MINE_MARKER)), -f $(MINE_COMPOSE))
+# Same for the Aktogay twin (team/aktogay), started by `make aktogay`.
+AKTOGAY_MARKER  := deploy/compose/.aktogay
+AKTOGAY_COMPOSE := team/aktogay/compose.yml
+COMPOSE := $(COMPOSE_BASE)$(if $(wildcard $(MINE_MARKER)), -f $(MINE_COMPOSE))$(if $(wildcard $(AKTOGAY_MARKER)), -f $(AKTOGAY_COMPOSE))
 
 ## Start the whole platform with Docker Compose (first run: generates credentials)
 up:
@@ -49,10 +52,24 @@ example-mine: up
 example-mine-stop:
 	$(COMPOSE_BASE) -f $(MINE_COMPOSE) stop mine-simulator
 
+## Run the Aktogay digital twin (twins + simulator + 3D Stand + Grafana dashboard) on the compose stack
+aktogay: up
+	$(COMPOSE_BASE) -f $(AKTOGAY_COMPOSE) up -d --build --wait --wait-timeout 600
+	@touch $(AKTOGAY_MARKER)
+	@bash team/aktogay/urls.sh
+
+## Stop the Aktogay simulator (twins and data stay)
+aktogay-stop:
+	$(COMPOSE_BASE) -f $(AKTOGAY_COMPOSE) stop aktogay-sim
+
+## Check the running Aktogay twin end to end, what-if scenarios included
+aktogay-verify:
+	@python3 team/aktogay/verify.py
+
 ## Stop the platform and DELETE all its data and credentials
 clean:
 	$(COMPOSE) down -v --remove-orphans
-	rm -f deploy/compose/.env $(MINE_MARKER)
+	rm -f deploy/compose/.env $(MINE_MARKER) $(AKTOGAY_MARKER)
 
 # ---------------------------------------------------------------------------
 # Helm deployment (servers): the chart at the repository root

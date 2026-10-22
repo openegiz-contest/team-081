@@ -1,0 +1,47 @@
+# Runs the Submission the way the Judge Environment does: a clean Ubuntu
+# 24.04 machine, the README commands literally, then the end-to-end check and
+# screenshots of the Stand. Team tooling, not part of the Stand itself.
+name: stand
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  stand:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: README — install make
+        run: sudo apt-get update -qq && sudo apt-get install -y make
+
+      - name: README — start the Stand
+        run: make aktogay
+
+      - name: README — end-to-end check
+        run: make aktogay-verify
+
+      - name: Screenshots of the Stand
+        if: always()
+        run: |
+          python3 -m venv /tmp/pw && /tmp/pw/bin/pip install -q playwright==1.48.0
+          /tmp/pw/bin/python -m playwright install --with-deps chromium >/dev/null
+          /tmp/pw/bin/python team/aktogay/ci/screenshots.py shots
+
+      - name: Logs
+        if: always()
+        run: |
+          mkdir -p shots
+          docker compose -f deploy/compose/docker-compose.yml -f team/aktogay/compose.yml ps -a > shots/ps.txt 2>&1 || true
+          docker compose -f deploy/compose/docker-compose.yml -f team/aktogay/compose.yml logs --no-color --tail=300 \
+            aktogay-setup aktogay-sim aktogay-ui > shots/logs.txt 2>&1 || true
+          free -m > shots/mem.txt
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stand
+          path: shots/

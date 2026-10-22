@@ -1,0 +1,58 @@
+# Aktogay digital twin: an overlay on deploy/compose/docker-compose.yml.
+# Started by `make aktogay` from the repository root. Paths are relative to
+# deploy/compose/, the directory of the first compose file.
+
+services:
+  aktogay-setup:
+    build: ../../team/aktogay/sim
+    image: team081/aktogay-sim:local
+    restart: "no"
+    command: ["python", "setup_twins.py"]
+    environment:
+      DITTO_URL: http://ditto-nginx:80
+      DITTO_PASSWORD: ${DITTO_PASSWORD}
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  # Same image as aktogay-setup, which builds it (see examples/mine/compose.yml
+  # for why only one service may have `build:` for an image).
+  aktogay-sim:
+    image: team081/aktogay-sim:local
+    pull_policy: never
+    restart: unless-stopped
+    mem_limit: 384m
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      DITTO_URL: http://ditto-nginx:80
+      DITTO_PASSWORD: ${DITTO_PASSWORD}
+      SIM_SPEEDUP: ${AKTOGAY_SPEEDUP:-8}
+    depends_on:
+      aktogay-setup:
+        condition: service_completed_successfully
+
+  aktogay-ui:
+    image: docker.io/library/nginx:1.25-alpine
+    restart: unless-stopped
+    mem_limit: 64m
+    environment:
+      DITTO_BASIC_AUTH: ${DITTO_BASIC_AUTH}
+      NGINX_ENVSUBST_FILTER: DITTO_
+    ports:
+      - "${OPENEGIZ_BIND:-127.0.0.1}:${AKTOGAY_PORT:-8070}:80"
+    volumes:
+      - ../../team/aktogay/ui:/usr/share/nginx/html:ro
+      - ../../team/aktogay/ui/nginx.conf.template:/etc/nginx/templates/default.conf.template:ro
+    depends_on:
+      ditto-nginx:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/healthz || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+
+  grafana:
+    volumes:
+      - ../../team/aktogay/grafana/aktogay.json:/var/lib/grafana/example-dashboards/aktogay.json:ro

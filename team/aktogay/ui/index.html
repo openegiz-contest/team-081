@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Актогай — цифровой двойник карьера</title>
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.min.js" } }
+</script>
+</head>
+<body>
+<div id="app">
+  <section id="scene-wrap">
+    <div id="scene"></div>
+    <div id="banner" hidden></div>
+    <div id="legend">
+      <div><i style="background:var(--truck-empty)"></i>Самосвал порожний</div>
+      <div><i style="background:var(--sulphide)"></i>С сульфидной рудой</div>
+      <div><i style="background:var(--oxide)"></i>С окисленной рудой</div>
+      <div><i style="background:var(--waste)"></i>Со вскрышей</div>
+      <div><i style="background:var(--down)"></i>Сход с линии / дорога закрыта</div>
+      <div class="hint">Колесо — масштаб, ЛКМ — вращение, ПКМ — сдвиг, клик по объекту — карточка двойника</div>
+    </div>
+    <div id="conn" class="pill">Ditto: подключение…</div>
+  </section>
+
+  <aside id="panel">
+    <header>
+      <h1>Актогай · транспортный сектор карьера</h1>
+      <div class="sub">Смена <b id="shift-no">–</b> · <b id="clock">--:--</b> · прошло <span id="elapsed">–</span> ч</div>
+    </header>
+
+    <section class="card">
+      <h2>Добыча за смену</h2>
+      <div class="kpis" id="kpis"></div>
+    </section>
+
+    <section class="card" id="forecast-card">
+      <h2>Прогноз до конца смены</h2>
+      <div id="forecast">Считается…</div>
+    </section>
+
+    <section class="card">
+      <h2>Диспетчеризация <span class="tag">модуль 1</span></h2>
+      <div class="row">
+        <span>Режим:</span>
+        <div class="seg" id="mode">
+          <button data-mode="dynamic">Динамический</button>
+          <button data-mode="fixed">Жёсткое закрепление</button>
+        </div>
+      </div>
+      <div id="decision" class="decision"></div>
+      <table class="alloc" id="alloc"></table>
+    </section>
+
+    <section class="card">
+      <h2>What-if сценарии</h2>
+      <div class="whatif" id="whatif"></div>
+    </section>
+
+    <section class="card" id="twin-card" hidden>
+      <h2 id="twin-title"></h2>
+      <div id="twin-actions"></div>
+      <pre id="twin-json"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Журнал диспетчера</h2>
+      <ol id="log"></ol>
+    </section>
+  </aside>
+</div>
+<script type="module" src="app.js"></script>
+</body>
+</html>

@@ -6,15 +6,15 @@
 
 <!-- Written by the Team before the code: your own choice, a few sentences per answer. Everything else in the Submission follows from it. -->
 
-**Enterprise:** <!-- Which mining enterprise, or which part of it, the twin represents. -->
+**Enterprise:** Медный ГОК Актогай (KAZ Minerals, Абайская область). <!-- Which mining enterprise, or which part of it, the twin represents. -->
 
 **Users:** <!-- Who uses the twin. -->
 
-**Decision:** <!-- Which decision the twin helps them make. -->
+**Decision:** С помощью двойника можно автоматизировать и заранее планировать весь процесс и решать задачи, пробежавшись по всем участкам: транспорт и диспетчеризация, геология и качество руды, буровзрывные работы, вентиляция и безопасность, энергетика, переработка, ТО оборудования. <!-- Which decision the twin helps them make. -->
 
-**Why this choice:** <!-- Why this enterprise, these users and this decision. -->
+**Why this choice:** Актогай, так как по нему больше открытых цифр. <!-- Why this enterprise, these users and this decision. -->
 
-**Real or fictional:** <!-- A real object: name it and give the sources of its numbers. A fictional one: which real objects it resembles and where its numbers come from. A real object with sourced numbers scores higher. -->
+**Real or fictional:** Реальный объект. <!-- A real object: name it and give the sources of its numbers. A fictional one: which real objects it resembles and where its numbers come from. A real object with sourced numbers scores higher. -->
 
 ## Team
 
